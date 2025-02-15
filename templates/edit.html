@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Site{% endblock %}
+
+{% block content %}
+<h2>Edit {{ site.name }}</h2>
+<a href="{{ url_for('serve_site_content', user_id=current_user.id, site_id=site.id) }}" class="btn" target="_blank">View
+	Site</a>
+
+<div style="margin-bottom: 30px;"></div>
+
+<label for="theme-selector">Select Theme:</label>
+<select id="theme-selector" style="width: 200px;">
+	<!-- Theme options will be populated here -->
+</select>
+
+
+<form method="POST">
+	<div class="form-group">
+		<label>Site Name:</label>
+		<input type="text" name="name" value="{{ site.name }}">
+	</div>
+
+	{% for filename, content in files.items() %}
+	<div class="form-group">
+		<label>{{ filename }}:</label>
+		<textarea name="{{ filename }}" rows="20"
+			data-language="{% if filename.endswith('.css') %}css{% elif filename.endswith('.js') %}javascript{% else %}htmlmixed{% endif %}">{{ content|trim }}</textarea>
+	</div>
+	{% endfor %}
+
+	<button type="submit">Save Changes</button>
+</form>
+
+<!-- Ace Editor -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.14/ace.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.14/ext-themelist.js"></script>
+
+<!-- Select2 -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+<script src="{{ url_for('static', filename='editor.js') }}"></script>
+
+
+<style>
+	/* Style for the Select2 dropdown */
+	.select2-container {
+		margin-bottom: 10px;
+	}
+
+	/* Ensure the editor has a defined height */
+	#editor {
+		width: 100%;
+		max-height: 500px;
+		border: 1px solid #ddd;
+	}
+</style>
+
+{% endblock %}

@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<h2>Your Sites</h2>
+
+<h3>Create New Site</h3>
+<form method="POST" action="{{ url_for('upload_site') }}" enctype="multipart/form-data">
+	<div class="form-group">
+		<label>Site Name:</label>
+		<input type="text" name="name" required>
+	</div>
+
+	<div class="form-group" onclick="document.querySelector('#file-input').click()">
+		<label class="upload-label">
+			Upload Files
+			<input type="file" name="files" style="display: none;" id="file-input" multiple accept=".html,.css,.js" required>
+		</label>
+	</div>
+
+	<!-- File Preview Section -->
+	<div id="file-preview" class="file-preview">
+		<h5>Selected Files:</h5>
+		<div id="file-grid" class="file-grid"></div>
+	</div>
+
+	<button type="submit" class="btn" style="margin-top: 20px;">Create Site</button>
+</form>
+
+<div style="margin-bottom: 30px;"></div>
+
+<h1>My Sites</h1>
+
+<div class="sites-list">
+	{% for site in sites %}
+	<div class="site-card">
+		<h4>{{ site.name }}</h4>
+		<p>Created: {{ site.created_at.strftime('%Y-%m-%d') }}</p>
+
+		<!-- Display uploaded files -->
+		<div class="uploaded-files">
+			<h5>Uploaded Files:</h5>
+			<div class="file-grid">
+				{% set site_dir = 'sites/' + current_user.id|string + '/' + site.id|string %}
+				{% for file in list_files(site_dir) %}
+				<div class="file-card">
+					<div
+						class="file-icon {{ 'html' if file.endswith('.html') else 'css' if file.endswith('.css') else 'js' }}">
+					</div>
+					<span class="file-name">{{ file }}</span>
+					<form method="POST" action="{{ url_for('delete_file', site_id=site.id, filename=file) }}"
+						style="display: inline;">
+						<button type="submit" class="file-close">&times;</button>
+					</form>
+				</div>
+				{% endfor %}
+			</div>
+		</div>
+
+		<!-- Site Actions -->
+		<div class="site-actions">
+			<a href="{{ url_for('edit_site', site_id=site.id) }}" class="btn">Edit</a>
+			<a href="{{ url_for('serve_site_content', user_id=current_user.id, site_id=site.id) }}" class="btn"
+				target="_blank">View Site</a>
+			<form method="POST" action="{{ url_for('delete_site', site_id=site.id) }}" style="display: inline;">
+				<button type="submit" class="btn btn-danger">Delete Site</button>
+			</form>
+		</div>
+	</div>
+	{% endfor %}
+</div>
+
+<!-- for File Management -->
+<script>
+	const fileInput = document.querySelector('#file-input');
+	const fileGrid = document.querySelector('#file-grid');
+
+	function getFileIconClass(filename) {
+		if (filename.endsWith('.html')) return 'html';
+		if (filename.endsWith('.css')) return 'css';
+		if (filename.endsWith('.js')) return 'js';
+		return 'generic';
+	}
+
+	function updateFilePreview() {
+		fileGrid.innerHTML = '';
+		const files = Array.from(fileInput.files);
+
+		files.forEach((file, index) => {
+			const fileCard = document.createElement('div');
+			fileCard.className = 'file-card';
+
+			fileCard.innerHTML = `
+                <div class="file-icon ${getFileIconClass(file.name)}"></div>
+                <span class="file-name">${file.name}</span>
+                <button type="button" class="file-close" onclick="removeFile(${index})">&times;</button>
+            `;
+
+			fileGrid.appendChild(fileCard);
+		});
+	}
+
+	function removeFile(index) {
+		const files = Array.from(fileInput.files);
+		files.splice(index, 1);
+
+		const newFileList = new DataTransfer();
+		files.forEach(file => newFileList.items.add(file));
+		fileInput.files = newFileList.files;
+
+		updateFilePreview();
+	}
+
+	window.addEventListener('DOMContentLoaded', updateFilePreview);
+	fileInput.addEventListener('change', () => {
+		document.querySelector('#file-preview').style.display = fileInput.files.length ? 'block' : 'non'
+		updateFilePreview();
+	});
+</script>
+
+{% endblock %}

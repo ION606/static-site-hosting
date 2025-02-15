@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Static Site Host - {% block title %}{% endblock %}</title>
+	<link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" id="theme-style">
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<script>
+		document.addEventListener('DOMContentLoaded', () => {
+			const themeToggle = document.querySelector('#theme-toggle');
+			const body = document.body;
+
+			// Get saved theme from localStorage
+			const savedTheme = localStorage.getItem('theme') || 'dark';
+			body.setAttribute('data-theme', savedTheme);
+
+			if (!savedTheme) localStorage.setItem('theme', savedTheme);
+
+			// Set initial button text
+			themeToggle.textContent = savedTheme === 'dark' ? 'Light Mode' : 'Dark Mode';
+
+			themeToggle.addEventListener('click', () => {
+				const isDark = body.getAttribute('data-theme') === 'dark';
+				body.setAttribute('data-theme', isDark ? 'light' : 'dark');
+				localStorage.setItem('theme', isDark ? 'light' : 'dark');
+				themeToggle.textContent = isDark ? 'Dark Mode' : 'Light Mode';
+			});
+		});
+	</script>
+</head>
+
+<body>
+	<nav class="navbar">
+		<div class="container">
+			<a href="{{ url_for('home') }}">Home</a>
+			{% if current_user.is_authenticated %}
+			<a href="{{ url_for('dashboard') }}">Dashboard</a>
+			<a href="{{ url_for('logout') }}">Logout</a>
+			{% else %}
+			<a href="{{ url_for('login') }}">Login</a>
+			<a href="{{ url_for('register') }}">Register</a>
+			{% endif %}
+			<button id="theme-toggle" class="btn">Toggle Dark Mode</button>
+		</div>
+	</nav>
+
+	<div class="container">
+		{% with messages = get_flashed_messages(with_categories=true) %}
+		{% if messages %}
+		{% for category, message in messages %}
+		<div class="flash-message flash-{{ category }}">
+			{{ message }}
+		</div>
+		{% endfor %}
+		{% endif %}
+		{% endwith %}
+
+		{% block content %}{% endblock %}
+	</div>
+</body>
+
+</html>
