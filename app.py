@@ -23,6 +23,8 @@ from werkzeug.exceptions import NotFound
 import os
 import shutil
 from datetime import datetime, timedelta
+from waitress import serve
+
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "your-secret-key"
@@ -309,4 +311,4 @@ if __name__ == "__main__":
 	os.makedirs(app.config["UPLOAD_FOLDER"], exist_ok=True)
 	with app.app_context():
 		db.create_all()
-		app.run(debug=True)
+		serve(app, host="0.0.0.0", port=5121)

@@ -17,7 +17,7 @@ source .venv/bin/activate
 pip install -r requirements.txt
 python app.py
 ```
-And that's it! The app should be available at http://localhost:5000
+And that's it! The app should be available at http://localhost:5121
 
 ## Contributing
 
