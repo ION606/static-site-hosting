@@ -4,10 +4,13 @@ build:
 	docker build -t static-sites .
 
 run:
-	docker run -d -p 5121:5121 --name static_sites static-sites
+	docker run -d -p 5121:5121 \
+		-v $(PWD)/sites:/app/sites \
+		-v $(PWD)/db.sqlite:/app/db.sqlite \
+		--name static_sites static-sites
 
 stop:
 	docker stop static_sites || true
 
 clean: stop
-	docker rm static_sites
+	docker rm static_sites || true
