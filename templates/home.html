@@ -1,8 +1,114 @@
 {% extends "base.html" %}
 
-{% block title %}Home{% endblock %}
-
 {% block content %}
-    <h1>Welcome to Static Site Host</h1>
-    <p>Upload and manage your static websites easily!</p>
+
+<style>
+	header {
+		text-align: center;
+		padding: 60px 20px;
+		background: var(--card-bg);
+		color: var(--text-color);
+	}
+
+	header h1 {
+		font-size: 2.5rem;
+		margin-bottom: 10px;
+	}
+
+	header p {
+		font-size: 1.2rem;
+		color: var(--text-color);
+	}
+
+	.main-container {
+		max-width: 900px;
+		margin: 40px auto;
+		padding: 20px;
+		text-align: center;
+	}
+
+	.feature-list {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: center;
+		margin-top: 20px;
+	}
+
+	.feature {
+		background: var(--card-bg);
+		border-radius: 8px;
+		padding: 20px;
+		margin: 10px;
+		width: 260px;
+		text-align: center;
+		box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+	}
+
+	.feature h3 {
+		color: var(--text-color);
+		margin-bottom: 10px;
+	}
+
+	.cta-section {
+		margin-top: 40px;
+		text-align: center;
+	}
+
+	footer {
+		margin-top: 40px;
+		padding: 20px;
+		background: var(--nav-bg);
+		text-align: center;
+		color: var(--nav-text);
+	}
+</style>
+
+<header>
+	<h1>🚀 ION Static Site Hosting</h1>
+	<p>Host and share your static sites effortlessly.</p>
+</header>
+
+<div class="main-container">
+	<h2>Why Choose Us?</h2>
+	<p>Whether you’re a developer, designer, or just need to showcase your work, we make it easy to host and share
+		static sites.</p>
+
+	<div class="feature-list">
+		<div class="feature">
+			<h3>⚡ Instant Hosting</h3>
+			<p>Upload your static files and get a live site in seconds.</p>
+		</div>
+		<div class="feature">
+			<h3>🌙 Dark Mode</h3>
+			<p>A sleek, modern interface that's easy on the eyes.</p>
+		</div>
+		<div class="feature">
+			<h3>✏️ Edit in Browser</h3>
+			<p>Make changes directly to your site with our built-in editor.</p>
+		</div>
+		<div class="feature">
+			<h3>🔒 Secure & Private</h3>
+			<p>Your data stays yours, no hidden tracking or ads.</p>
+		</div>
+		<div class="feature">
+			<h3>📂 Simple File Management</h3>
+			<p>Easily organize and update your projects.</p>
+		</div>
+		<div class="feature">
+			<h3>🚀 Blazing Fast</h3>
+			<p>Minimal setup, maximum performance.</p>
+		</div>
+	</div>
+
+	<div class="cta-section">
+		<h2>Get Started Now</h2>
+		<p>No signup required. Upload your first site and go live instantly!</p>
+		<a href="{{ url_for('dashboard') }}" class="btn">Upload Your Site</a>
+	</div>
+</div>
+
+<footer>
+	<p>&copy; 2024 ION Static Hosting. All rights reserved.</p>
+</footer>
+
 {% endblock %}
