@@ -2,3 +2,6 @@
 instance
 sites
 __pycache__
+nohup.out
+app.pid
+*.log
