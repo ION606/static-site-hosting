@@ -1,18 +1,17 @@
-all: build run
-
-build:
-	docker build -t static-sites .
+all: run
 
 run:
-	docker run -d -p 5121:5121 \
-		-v $(PWD)/templates:/app/templates \
-		-v $(PWD)/static:/app/static \
-		-v $(PWD)/sites:/app/sites \
-		-v $(PWD)/db.sqlite:/app/db.sqlite \
-		--name static_sites static-sites
+	nohup .venv/bin/python app.py > output.log 2>&1 & echo $! > app.pid
 
 stop:
-	docker stop static_sites || true
+	kill -9 $(cat app.pid) || true
+	rm -f app.pid
+
+restart: stop run
+
+logs:
+	tail -f output.log
 
 clean: stop
-	docker rm static_sites || true
+	rm -f output.log
+
