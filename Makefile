@@ -5,6 +5,8 @@ build:
 
 run:
 	docker run -d -p 5121:5121 \
+		-v $(PWD)/templates:/app/templates \
+		-v $(PWD)/static:/app/static \
 		-v $(PWD)/sites:/app/sites \
 		-v $(PWD)/db.sqlite:/app/db.sqlite \
 		--name static_sites static-sites
