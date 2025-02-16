@@ -261,6 +261,29 @@ button:hover,
 	box-shadow: 0 5px 10px rgba(0, 0, 0, 0.15);
 }
 
+.flash-messages {
+	margin: 10px 0;
+}
+
+.flash-message {
+	padding: 10px;
+	margin-bottom: 10px;
+	border: 1px solid transparent;
+	border-radius: 4px;
+}
+
+.flash-success {
+	color: #3c763d;
+	background-color: #dff0d8;
+	border-color: #d6e9c6;
+}
+
+.flash-error {
+	color: #a94442;
+	background-color: #f2dede;
+	border-color: #ebccd1;
+}
+
 /* Theme Toggle */
 #theme-toggle {
 	background-color: var(--card-bg);
@@ -293,6 +316,23 @@ button:hover,
 
 .upload-label:hover {
 	background-color: #0056b3;
+}
+
+#editor-container {
+    width: 100%;
+    height: 400px;
+    border: 1px solid #ddd;
+    margin-top: 20px;
+    transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+    transform: translateY(-100%);
+    opacity: 0;
+    display: none; /* Initially hidden */
+}
+
+#editor-container.visible {
+    transform: translateY(0);
+    opacity: 1;
+    display: block; /* Display when visible */
 }
 
 @media (max-width: 768px) {
