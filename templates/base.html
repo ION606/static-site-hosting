@@ -13,13 +13,12 @@
 	<meta property="og:description"
 		content="Host and share your static sites effortlessly with ION Static Site Hosting. Enjoy instant deployment, a sleek dark mode interface, and secure, private data handling!">
 	<meta property="og:image" content="{{ url_for('static', filename='hosting.png') }}">
-	<meta property="og:url" content="https://{{session['servername']}}/">
+	<meta property="og:url" content="https://{{ SERVERNAME }}/">
 	<meta name="twitter:card" content="{{ url_for('static', filename='hosting.png') }}">
 	<meta name="twitter:title" content="ION Static Site Hosting">
 	<meta name="twitter:description"
 		content="Host and share your static sites effortlessly with ION Static Site Hosting. Enjoy instant deployment, a sleek dark mode interface, and secure, private data handling!">
 	<meta name="twitter:image" content="{{ url_for('static', filename='hosting.png') }}">
-
 
 	<title>ION Static Site Hosting - {% block title %}{% endblock %}</title>
 	<link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" id="theme-style">
@@ -53,13 +52,13 @@
 <body>
 	<nav class="navbar">
 		<div class="container">
-			<a href="https://{{ SERVERNAME }}">Home</a>
+			<a href="{{ url_for('home', _external=True) }}">Home</a>
 			{% if current_user.is_authenticated %}
-			<a href="https://{{ SERVERNAME }}/dashboard">Dashboard</a>
-			<a href="https://{{ SERVERNAME }}/logout">Logout</a>
+			<a href="{{ url_for('dashboard', _external=True) }}">Dashboard</a>
+			<a href="{{ url_for('logout', _external=True) }}">Logout</a>
 			{% else %}
-			<a href="{{ url_for('login') }}">Login</a>
-			<a href="{{ url_for('register') }}">Register</a>
+			<a href="{{ url_for('login', _external=True) }}">Login</a>
+			<a href="{{ url_for('register', _external=True) }}">Register</a>
 			{% endif %}
 			<button id="theme-toggle" class="btn">Toggle Dark Mode</button>
 		</div>
