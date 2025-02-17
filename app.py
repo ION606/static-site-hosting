@@ -31,16 +31,19 @@ from secrets import token_hex
 app = Flask(__name__)
 
 try:
-	with open("instance/secret.key", "rb") as f:
+	with open("/app/instance/secret.key", "rb") as f:
 		app.config["SECRET_KEY"] = bytes.hex(f.readline())
 except FileNotFoundError as e:
-	os.mkdir('instance')
-	with open("instance/secret.key", "wb") as f:
+	if not os.path.exists("/app/instance"):
+		os.mkdir("/app/instance")
+
+	with open("/app/instance/secret.key", "wb") as f:
 		newKey = token_hex(64)
 		f.write(bytearray.fromhex(newKey))
 		app.config["SECRET_KEY"] = newKey
 
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///db.sqlite"
+PORT = 5121
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:////app/instance/db.sqlite"
 app.config["UPLOAD_FOLDER"] = "sites"
 app.config["SERVER_NAME"] = "tinysite.cloud"
 app.config["SESSION_COOKIE_DOMAIN"] = ".tinysite.cloud"
@@ -62,11 +65,16 @@ RESERVED_SUBDOMAINS = {
 	"secure",
 	"mail",
 	"status",
-	"gateway"
+	"gateway",
 }
 
 
-def isDefaultRoute(subdomain):
+# TODO: add specific page redirects here as they're added
+def isDefaultRoute(hostname: str):
+	if hostname.count(".") < 2:
+		return True
+
+	subdomain = hostname.host.split(".")[0]
 	return not subdomain or subdomain in RESERVED_SUBDOMAINS
 
 
@@ -179,7 +187,12 @@ def register():
 @login_required
 def dashboard():
 	sites = Site.query.filter_by(user_id=current_user.id).all()
-	return render_template("dashboard.html", sites=sites, subdomain=request.host.split('.')[0], hostname=app.config["SERVER_NAME"])
+	return render_template(
+		"dashboard.html",
+		sites=sites,
+		subdomain=request.host.split(".")[0],
+		hostname=app.config["SERVER_NAME"],
+	)
 
 
 @app.route("/upload", methods=["POST"])
@@ -311,18 +324,17 @@ def delete_file(site_id, filename):
 @app.route("/", subdomain="<subdomain>", defaults={"filename": "index.html"})
 @app.route("/<path:filename>")
 def serve_site_content(filename):
-	subdomain = request.host.split('.')[0]
-    
+	subdomain = request.host.split(".")[0]
+
 	site = Site.query.filter_by(subdomain=subdomain).first_or_404()
 	site.last_accessed = datetime.utcnow()
 	db.session.commit()
-  
+
 	site_dir = os.path.join(
 		app.config["UPLOAD_FOLDER"], str(site.user_id), str(site.id)
 	)
 
-	# TODO: add specific page redirects here as they're added
-	if isDefaultRoute(subdomain):
+	if isDefaultRoute(request.host):
 		return send_from_directory("index.html")
 
 	# Security check
@@ -358,11 +370,11 @@ def home():
 	if isDefaultRoute(request.host):
 		return render_template("home.html")
 	else:
-		return serve_site_content('index.html')
+		return serve_site_content("index.html")
 
 
 if __name__ == "__main__":
 	os.makedirs(app.config["UPLOAD_FOLDER"], exist_ok=True)
 	with app.app_context():
 		db.create_all()
-		serve(app, host="0.0.0.0", port=5121)
+		serve(app, host="0.0.0.0", port=PORT)

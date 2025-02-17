@@ -1,19 +1,16 @@
 all: run
 
 run:
-	nohup python app.py > output.log 2>&1 & echo $$! > app.pid
+	docker compose build
+	docker compose up -d
 
 stop:
-	@if [ -s app.pid ]; then \
-		kill -9 $$(cat app.pid) && rm -f app.pid; \
-	else \
-		echo "No running process found."; \
-	fi
+	docker compose down -v
 
 restart: stop run
 
 logs:
-	tail -f output.log
+	docker compose logs -f
 
 clean: stop
 	rm -f output.log app.pid

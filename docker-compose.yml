@@ -1,0 +1,15 @@
+services:
+  app:
+    build: .
+    ports:
+      - "5121:5121"
+    networks:
+      - static
+    volumes:
+      - ./instance:/app/instance
+      - ./sites:/app/sites
+    environment:
+      - FLASK_ENV=production
+
+networks:
+  static:
