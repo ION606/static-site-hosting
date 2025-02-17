@@ -74,7 +74,7 @@ def isDefaultRoute(hostname: str):
 	if hostname.count(".") < 2:
 		return True
 
-	subdomain = hostname.host.split(".")[0]
+	subdomain = hostname.split(".")[0]
 	return not subdomain or subdomain in RESERVED_SUBDOMAINS
 
 
