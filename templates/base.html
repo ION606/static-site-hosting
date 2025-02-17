@@ -4,8 +4,26 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description"
+		content="ION Static Site Hosting offers effortless hosting and sharing of static sites with instant deployment, dark mode interface, and secure, private data handling!">
+	<meta name="keywords"
+		content="static site hosting, instant deployment, dark mode, secure hosting, private data, file management, blazing fast">
+	<meta name="author" content="ION606">
+	<meta property="og:title" content="ION Static Site Hosting">
+	<meta property="og:description"
+		content="Host and share your static sites effortlessly with ION Static Site Hosting. Enjoy instant deployment, a sleek dark mode interface, and secure, private data handling!">
+	<meta property="og:image" content="{{ url_for('static', filename='hosting.png') }}">
+	<meta property="og:url" content="https://sites.ion606.com/">
+	<meta name="twitter:card" content="{{ url_for('static', filename='hosting.png') }}">
+	<meta name="twitter:title" content="ION Static Site Hosting">
+	<meta name="twitter:description"
+		content="Host and share your static sites effortlessly with ION Static Site Hosting. Enjoy instant deployment, a sleek dark mode interface, and secure, private data handling!">
+	<meta name="twitter:image" content="{{ url_for('static', filename='hosting.png') }}">
+
+
 	<title>ION Static Site Hosting - {% block title %}{% endblock %}</title>
 	<link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" id="theme-style">
+	<link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
 
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 	<script>
