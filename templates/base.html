@@ -13,7 +13,7 @@
 	<meta property="og:description"
 		content="Host and share your static sites effortlessly with ION Static Site Hosting. Enjoy instant deployment, a sleek dark mode interface, and secure, private data handling!">
 	<meta property="og:image" content="{{ url_for('static', filename='hosting.png') }}">
-	<meta property="og:url" content="https://sites.ion606.com/">
+	<meta property="og:url" content="https://{{session['servername']}}/">
 	<meta name="twitter:card" content="{{ url_for('static', filename='hosting.png') }}">
 	<meta name="twitter:title" content="ION Static Site Hosting">
 	<meta name="twitter:description"
@@ -53,10 +53,10 @@
 <body>
 	<nav class="navbar">
 		<div class="container">
-			<a href="{{ url_for('home') }}">Home</a>
+			<a href="https://{{ SERVERNAME }}">Home</a>
 			{% if current_user.is_authenticated %}
-			<a href="{{ url_for('dashboard') }}">Dashboard</a>
-			<a href="{{ url_for('logout') }}">Logout</a>
+			<a href="https://{{ SERVERNAME }}/dashboard">Dashboard</a>
+			<a href="https://{{ SERVERNAME }}/logout">Logout</a>
 			{% else %}
 			<a href="{{ url_for('login') }}">Login</a>
 			<a href="{{ url_for('register') }}">Register</a>

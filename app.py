@@ -8,6 +8,7 @@ from flask import (
 	flash,
 	abort,
 	jsonify,
+	session
 )
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import (
@@ -46,7 +47,7 @@ PORT = 5121
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:////app/instance/db.sqlite"
 app.config["UPLOAD_FOLDER"] = "sites"
 app.config["SERVER_NAME"] = "tinysite.cloud"
-app.config["SESSION_COOKIE_DOMAIN"] = ".tinysite.cloud"
+# app.config["SESSION_COOKIE_DOMAIN"] = ".tinysite.cloud"
 db = SQLAlchemy(app)
 
 
@@ -103,6 +104,12 @@ class Site(db.Model):
 @app.errorhandler(404)
 def page_not_found(_):
 	return render_template("404.html", domain=request.host), 404
+
+@app.context_processor
+def inject_global_variable():
+    return {
+        "SERVERNAME": app.config["SERVER_NAME"],
+    }
 
 
 # Auth setup
