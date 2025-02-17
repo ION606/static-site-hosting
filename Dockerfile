@@ -13,4 +13,4 @@ COPY . .
 
 EXPOSE 5121
 
-CMD ["python", "app.py"]
+CMD ["python", "run.py"]
