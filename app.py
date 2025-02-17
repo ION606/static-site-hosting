@@ -30,6 +30,8 @@ import re
 from secrets import token_hex
 
 app = Flask(__name__)
+app.config["SESSION_TYPE"] = "filesystem"
+app.config["SESSION_FILE_DIR"] = "/app/instance/flask_session"
 
 try:
     with open("/app/instance/secret.key", "rb") as f:
@@ -48,6 +50,14 @@ app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:////app/instance/db.sqlite"
 app.config["UPLOAD_FOLDER"] = "sites"
 app.config["SERVER_NAME"] = "tinysite.cloud"
 app.config["SESSION_COOKIE_DOMAIN"] = ".tinysite.cloud"
+app.config["SESSION_COOKIE_NAME"] = "tinysite_session"
+app.config["SESSION_COOKIE_HTTPONLY"] = True
+app.config["SESSION_COOKIE_SECURE"] = True  # If using HTTPS
+app.config["SESSION_COOKIE_SAMESITE"] = "Lax"
+app.config["SQLALCHEMY_ENGINE_OPTIONS"] = {
+    "pool_pre_ping": True,
+    "pool_recycle": 300,
+}
 db = SQLAlchemy(app)
 
 
@@ -139,8 +149,8 @@ def inject_subdomain():
 def page_not_found(_):
     host = request.host
     server_name = app.config["SERVER_NAME"]
-    server_parts = server_name.split('.')
-    host_parts = host.split('.')
+    server_parts = server_name.split(".")
+    host_parts = host.split(".")
     show_domain = False
 
     # Case 1: Direct match of main domain
@@ -148,19 +158,22 @@ def page_not_found(_):
         show_domain = True
     else:
         # Extract potential subdomain
-        if host_parts[-len(server_parts):] == server_parts:
-            subdomain = '.'.join(host_parts[:-len(server_parts)])
-            
+        if host_parts[-len(server_parts) :] == server_parts:
+            subdomain = ".".join(host_parts[: -len(server_parts)])
+
             # Case 2: Subdomain doesn't exist and isn't reserved
             if subdomain and subdomain not in RESERVED_SUBDOMAINS:
                 if not Site.query.filter_by(subdomain=subdomain).first():
                     show_domain = True
 
-    return render_template(
-        "404.html", 
-        domain=host if show_domain else None,
-        is_main_domain=(host == server_name)
-    ), 404
+    return (
+        render_template(
+            "404.html",
+            domain=host if show_domain else None,
+            is_main_domain=(host == server_name),
+        ),
+        404,
+    )
 
 
 # Auth setup
@@ -210,6 +223,7 @@ def login():
 
         if user and user.check_password(password):
             login_user(user)
+            session.permanent = True  # Add this line
             return redirect(url_for("dashboard"))
         flash("Invalid email or password")
     return render_template("login.html")
