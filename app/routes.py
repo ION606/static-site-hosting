@@ -19,8 +19,14 @@ import os
 import shutil
 from .models import db, User, Site
 from .upload import handle_upload
+from . import login_manager
 
-main_routes = Blueprint("main", __name__)
+main_routes = Blueprint("main", __name__, template_folder="templates")
+
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
 
 
 # Context processor
