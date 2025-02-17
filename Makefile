@@ -17,3 +17,7 @@ logs:
 
 clean: stop
 	rm -f output.log app.pid
+
+reset: clean
+	rm -rf instance
+	rm -rf sites

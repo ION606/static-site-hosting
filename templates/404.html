@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+	.error-container {
+		text-align: center;
+		padding: 100px 20px;
+		min-height: 60vh;
+	}
+
+	.error-emoji {
+		font-size: 4rem;
+		margin-bottom: 1rem;
+	}
+
+	.error-message {
+		max-width: 600px;
+		margin: 0 auto 2rem;
+	}
+
+	.cta-button {
+		margin-top: 2rem;
+	}
+
+	.alien {
+		font-size: 5rem;
+		margin: 2rem 0;
+		animation: float 3s ease-in-out infinite;
+	}
+
+	@keyframes float {
+		0% {
+			transform: translateY(0px);
+		}
+
+		50% {
+			transform: translateY(-20px);
+		}
+
+		100% {
+			transform: translateY(0px);
+		}
+	}
+</style>
+
+<script>
+	document.addEventListener("DOMContentLoaded", () => {
+		const emojis = ["👽", "🚀", "🛸", "🌌", "🌠", "🔭", "🪐", "🌍", "✨", "👾"];
+		const randomEmoji = emojis[Math.floor(Math.random() * emojis.length)];
+
+		const alienElement = document.querySelector(".alien");
+		if (alienElement) {
+			alienElement.textContent = randomEmoji;
+		}
+	});
+</script>
+
+<div class="error-container">
+	<div class="alien">👽</div>
+	<h1>Houston, We Have a Problem!</h1>
+
+	<div class="error-message">
+		<p>The site you're looking for doesn't exist... yet!</p>
+		<p>But don't worry, this corner of the internet is just waiting for your creativity.</p>
+	</div>
+
+	{% if current_user.is_authenticated %}
+	<a href="{{ url_for('dashboard') }}" class="btn cta-button">
+		🚀 Create {{ domain }}
+	</a>
+	{% else %}
+	<div class="auth-buttons">
+		<p>Start your web hosting journey today!</p>
+		<a href="{{ url_for('register') }}" class="btn">Sign Up</a>
+		<a href="{{ url_for('login') }}" class="btn">Login</a>
+	</div>
+	{% endif %}
+
+	<div style="margin-top: 3rem;">
+		<small>PS: If you were looking for someone else's site, maybe they forgot to launch it! 🚀</small>
+	</div>
+</div>
+{% endblock %}
