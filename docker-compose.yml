@@ -10,7 +10,6 @@ services:
       - ./sites:/app/sites
     environment:
       - FLASK_ENV=production
-    user: "1000:1000"  # run as non-root user
 
 networks:
   static:

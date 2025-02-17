@@ -1,4 +1,3 @@
-# current_app/routes.py
 from flask import (
     Blueprint,
     render_template,
@@ -20,8 +19,19 @@ import shutil
 from .models import db, User, Site
 from .upload import handle_upload
 from . import login_manager
+from .helpers import list_files
 
 main_routes = Blueprint("main", __name__, template_folder="templates")
+
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
+
+
+@main_routes.app_context_processor
+def inject_utilities():
+    return dict(list_files=list_files)
 
 
 @login_manager.user_loader
