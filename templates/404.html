@@ -65,14 +65,25 @@
 	</div>
 
 	{% if current_user.is_authenticated %}
-	<a href="{{ url_for('dashboard') }}" class="btn cta-button">
-		🚀 Create {{ domain }}
+	{% if domain %}
+	<a href="{{ url_for('dashboard', _external=True) }}" class="btn cta-button">
+		🚀 Create {{ domain.split('.')[0]|default("Site", true) }}
 	</a>
 	{% else %}
 	<div class="auth-buttons">
+		{% if is_main_domain %}
 		<p>Start your web hosting journey today!</p>
-		<a href="{{ url_for('register') }}" class="btn">Sign Up</a>
-		<a href="{{ url_for('login') }}" class="btn">Login</a>
+		<a href="{{ url_for('register', _external=True) }}">Sign Up</a>
+		{% else %}
+		<p>The page you requested doesn't exist on this site.</p>
+		{% endif %}
+	</div>
+	{% endif %}
+	{% else %}
+	<div class="auth-buttons">
+		<p>Start your web hosting journey today!</p>
+		<a href="{{ url_for('login', _external=True) }}">Login</a>
+		<a href="{{ url_for('register', _external=True) }}">Sign Up</a>
 	</div>
 	{% endif %}
 

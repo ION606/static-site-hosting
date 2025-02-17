@@ -137,7 +137,30 @@ def inject_subdomain():
 
 @app.errorhandler(404)
 def page_not_found(_):
-    return render_template("404.html", domain=request.host), 404
+    host = request.host
+    server_name = app.config["SERVER_NAME"]
+    server_parts = server_name.split('.')
+    host_parts = host.split('.')
+    show_domain = False
+
+    # Case 1: Direct match of main domain
+    if host == server_name:
+        show_domain = True
+    else:
+        # Extract potential subdomain
+        if host_parts[-len(server_parts):] == server_parts:
+            subdomain = '.'.join(host_parts[:-len(server_parts)])
+            
+            # Case 2: Subdomain doesn't exist and isn't reserved
+            if subdomain and subdomain not in RESERVED_SUBDOMAINS:
+                if not Site.query.filter_by(subdomain=subdomain).first():
+                    show_domain = True
+
+    return render_template(
+        "404.html", 
+        domain=host if show_domain else None,
+        is_main_domain=(host == server_name)
+    ), 404
 
 
 # Auth setup
