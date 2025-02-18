@@ -52,13 +52,13 @@
 <body>
 	<nav class="navbar">
 		<div class="container">
-			<a href="{{ url_for('home', _external=True) }}">Home</a>
+			<a href="{{ url_for('main.home', _external=True) }}">Home</a>
 			{% if current_user.is_authenticated %}
-			<a href="{{ url_for('dashboard', _external=True) }}">Dashboard</a>
-			<a href="{{ url_for('logout', _external=True) }}">Logout</a>
+			<a href="{{ url_for('main.dashboard', _external=True) }}">Dashboard</a>
+			<a href="{{ url_for('main.logout', _external=True) }}">Logout</a>
 			{% else %}
-			<a href="{{ url_for('login', _external=True) }}">Login</a>
-			<a href="{{ url_for('register', _external=True) }}">Register</a>
+			<a href="{{ url_for('main.login', _external=True) }}">Login</a>
+			<a href="{{ url_for('main.register', _external=True) }}">Register</a>
 			{% endif %}
 			<button id="theme-toggle" class="btn">Toggle Dark Mode</button>
 		</div>

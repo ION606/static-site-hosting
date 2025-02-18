@@ -1,8 +1,7 @@
 all: run
 
 run:
-	docker compose build
-	docker compose up -d
+	docker compose up --build -d
 
 stop:
 	docker compose down -v

@@ -6,7 +6,7 @@
 <h2>Your Sites</h2>
 
 <h3>Create New Site</h3>
-<form method="POST" action="{{ url_for('upload_site') }}" enctype="multipart/form-data">
+<form method="POST" action="{{ url_for('main.upload_site') }}" enctype="multipart/form-data">
 	<div class="form-group">
 		<label>Site Name:</label>
 		<input type="text" name="name" required>
@@ -59,7 +59,7 @@
 						class="file-icon {{ 'html' if file.endswith('.html') else 'css' if file.endswith('.css') else 'js' }}">
 					</div>
 					<span class="file-name">{{ file }}</span>
-					<form method="POST" action="{{ url_for('delete_file', site_id=site.id, filename=file) }}"
+					<form method="POST" action="{{ url_for('main.delete_file', site_id=site.id, filename=file) }}"
 						style="display: inline;">
 						<button type="submit" class="file-close">&times;</button>
 					</form>
@@ -70,11 +70,11 @@
 
 		<!-- Site Actions -->
 		<div class="site-actions">
-			<a href="{{ url_for('edit_site', site_id=site.id) }}" class="btn">Edit</a>
-			<a href="{{ url_for('serve_site_content', filename='index.html', _external=True, subdomain=site.subdomain) }}">Visit
+			<a href="{{ url_for('main.edit_site', site_id=site.id) }}" class="btn">Edit</a>
+			<a href="{{ url_for('main.serve_site_content', filename='index.html', _external=True, subdomain=site.subdomain) }}">Visit
 				{{ site.name }}
 			</a>
-			<form method="POST" action="{{ url_for('delete_site', site_id=site.id) }}" style="display: inline;">
+			<form method="POST" action="{{ url_for('main.delete_site', site_id=site.id) }}" style="display: inline;">
 				<button type="submit" class="btn btn-danger">Delete Site</button>
 			</form>
 		</div>
