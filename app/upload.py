@@ -109,3 +109,4 @@ def handle_upload(current_user, site_name, subdomain, files):
 
     flash("Site created!", "success")
     return redirect(url_for("dashboard"))
+

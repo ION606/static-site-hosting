@@ -2,10 +2,11 @@ from flask import current_app
 from datetime import datetime, timedelta
 import os
 import shutil
-from .models import db, User, Site
 
 
 def delete_inactive_sites():
+    from .models import db, Site  # lazy import to avoid circular dependency
+
     with current_app.app_context():
         cutoff = datetime.utcnow() - timedelta(days=30)
         sites = Site.query.filter(Site.last_accessed < cutoff).all()
