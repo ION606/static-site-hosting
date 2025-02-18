@@ -30,52 +30,30 @@
 			const themeToggle = document.querySelector('#theme-toggle');
 			const body = document.body;
 
-			// Get saved theme from localStorage
+			// get saved theme from localStorage
 			const savedTheme = localStorage.getItem('theme') || 'dark';
 			body.setAttribute('data-theme', savedTheme);
 
 			if (!savedTheme) localStorage.setItem('theme', savedTheme);
 
-			// Set initial button text
-			themeToggle.textContent = savedTheme === 'dark' ? 'Light Mode' : 'Dark Mode';
+			// set initial button text
+			themeToggle.textContent = savedTheme === 'dark' ? 'light mode' : 'dark mode';
 
 			themeToggle.addEventListener('click', () => {
 				const isDark = body.getAttribute('data-theme') === 'dark';
 				body.setAttribute('data-theme', isDark ? 'light' : 'dark');
 				localStorage.setItem('theme', isDark ? 'light' : 'dark');
-				themeToggle.textContent = isDark ? 'Dark Mode' : 'Light Mode';
+				themeToggle.textContent = isDark ? 'dark mode' : 'light mode';
 			});
 		});
 	</script>
 
 	<style>
-		/* collapsible navbar */
-		.navbar-links {
-			display: flex;
-			align-items: center;
-			gap: 1rem;
-		}
-
 		.navbar-toggle {
 			display: none;
-			font-size: 1.5rem;
-			background: none;
-			border: none;
-			color: var(--nav-text);
-			cursor: pointer;
 		}
 
 		@media (max-width: 768px) {
-			.navbar-links {
-				display: none;
-				flex-direction: column;
-				width: 100%;
-			}
-
-			.navbar-links.active {
-				display: flex;
-			}
-
 			.navbar-toggle {
 				display: block;
 			}
@@ -87,7 +65,7 @@
 	<nav class="navbar">
 		<div class="container">
 			<a href="{{ url_for('main.home', _external=True) }}">Home</a>
-			<button id="nav-toggle" class="navbar-toggle">&#9776;</button>
+			<button id="nav-toggle" class="navbar-toggle" aria-label="menu">&#9776;</button>
 			<div id="navbar-links" class="navbar-links">
 				{% if current_user.is_authenticated %}
 				<a href="{{ url_for('main.dashboard', _external=True) }}">Dashboard</a>
@@ -96,7 +74,7 @@
 				<a href="{{ url_for('main.login', _external=True) }}">Login</a>
 				<a href="{{ url_for('main.register', _external=True) }}">Register</a>
 				{% endif %}
-				<button id="theme-toggle" class="btn">Toggle Dark Mode</button>
+				<button id="theme-toggle" class="btn">toggle dark mode</button>
 			</div>
 		</div>
 	</nav>
@@ -114,6 +92,26 @@
 
 		{% block content %}{% endblock %}
 	</div>
+
+	<script>
+		document.addEventListener('DOMContentLoaded', () => {
+			const navToggle = document.querySelector('#nav-toggle');
+			const navbarLinks = document.querySelector('#navbar-links');
+			const navbar = document.querySelector('.navbar');
+
+			navToggle.addEventListener('click', () => {
+				navbarLinks.classList.toggle('active');
+				navToggle.classList.toggle('active');
+			});
+
+			document.addEventListener('click', (e) => {
+				if (!navbar.contains(e.target)) {
+					navbarLinks.classList.remove('active');
+					navToggle.classList.remove('active');
+				}
+			});
+		});
+	</script>
 </body>
 
-</html>
+</html>m

@@ -59,31 +59,6 @@ body {
 	padding: 20px;
 }
 
-/* Navigation Bar */
-.navbar {
-	background-color: var(--nav-bg);
-	color: var(--nav-text);
-	padding: 1rem;
-	margin-bottom: 2rem;
-	border-radius: 6px;
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-}
-
-.navbar a {
-	color: var(--nav-text);
-	text-decoration: none;
-	margin-right: 1.5rem;
-	font-weight: bold;
-	transition: color 0.3s;
-}
-
-.navbar a:hover {
-	color: var(--accent-color);
-}
-
 /* Forms and Inputs */
 .form-group {
 	margin-bottom: 1.5rem;
@@ -341,22 +316,98 @@ button:hover,
 	.file-grid {
 		grid-template-columns: repeat(2, 1fr);
 	}
+}
 
-	.container {
-		padding: 10px;
+/* navbar */
+.navbar {
+	background-color: var(--nav-bg);
+	color: var(--nav-text);
+	padding: 1rem;
+	margin-bottom: 2rem;
+	border-radius: 6px;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+	position: relative;
+}
+
+.navbar .container {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	width: 100%;
+	position: relative;
+}
+
+.navbar-links {
+	display: flex;
+	align-items: center;
+	gap: 1.5rem;
+}
+
+.navbar a {
+	color: var(--nav-text);
+	text-decoration: none;
+	font-weight: bold;
+	transition: all 0.3s ease;
+	padding: 0.5rem;
+	border-radius: 4px;
+}
+
+.navbar a:hover {
+	color: var(--accent-color);
+	background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* mobile navbar */
+@media (max-width: 768px) {
+	.navbar {
+		padding: 0.75rem;
 	}
 
-	.navbar {
+	.navbar-links {
+		position: absolute;
+		top: 100%;
+		left: 0;
+		right: 0;
+		background-color: var(--nav-bg);
 		flex-direction: column;
-		align-items: flex-start;
+		gap: 0;
+		max-height: 0;
+		opacity: 0;
+		overflow: hidden;
+		padding: 0;
+		box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+		z-index: 1000;
+		transition: max-height 0.4s ease-out, opacity 0.3s ease-out, padding 0.3s ease-out;
+	}
+
+	.navbar-links.active {
+		max-height: 500px;
+		opacity: 1;
+		padding: 1rem;
 	}
 
 	.navbar a {
-		margin: 5px 0;
+		width: 100%;
+		margin: 0.25rem 0;
+		padding: 0.75rem;
 	}
 
-	.site-card {
-		padding: 15px;
-		margin-bottom: 10px;
+	.navbar-toggle {
+		display: block;
+		background: none;
+		border: none;
+		color: var(--nav-text);
+		font-size: 1.5rem;
+		cursor: pointer;
+		padding: 0.5rem;
+	}
+
+	#theme-toggle {
+		width: 100%;
+		margin: 0.25rem 0;
+		text-align: left;
 	}
 }
