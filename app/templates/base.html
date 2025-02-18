@@ -47,20 +47,57 @@
 			});
 		});
 	</script>
+
+	<style>
+		/* collapsible navbar */
+		.navbar-links {
+			display: flex;
+			align-items: center;
+			gap: 1rem;
+		}
+
+		.navbar-toggle {
+			display: none;
+			font-size: 1.5rem;
+			background: none;
+			border: none;
+			color: var(--nav-text);
+			cursor: pointer;
+		}
+
+		@media (max-width: 768px) {
+			.navbar-links {
+				display: none;
+				flex-direction: column;
+				width: 100%;
+			}
+
+			.navbar-links.active {
+				display: flex;
+			}
+
+			.navbar-toggle {
+				display: block;
+			}
+		}
+	</style>
 </head>
 
 <body>
 	<nav class="navbar">
 		<div class="container">
 			<a href="{{ url_for('main.home', _external=True) }}">Home</a>
-			{% if current_user.is_authenticated %}
-			<a href="{{ url_for('main.dashboard', _external=True) }}">Dashboard</a>
-			<a href="{{ url_for('main.logout', _external=True) }}">Logout</a>
-			{% else %}
-			<a href="{{ url_for('main.login', _external=True) }}">Login</a>
-			<a href="{{ url_for('main.register', _external=True) }}">Register</a>
-			{% endif %}
-			<button id="theme-toggle" class="btn">Toggle Dark Mode</button>
+			<button id="nav-toggle" class="navbar-toggle">&#9776;</button>
+			<div id="navbar-links" class="navbar-links">
+				{% if current_user.is_authenticated %}
+				<a href="{{ url_for('main.dashboard', _external=True) }}">Dashboard</a>
+				<a href="{{ url_for('main.logout', _external=True) }}">Logout</a>
+				{% else %}
+				<a href="{{ url_for('main.login', _external=True) }}">Login</a>
+				<a href="{{ url_for('main.register', _external=True) }}">Register</a>
+				{% endif %}
+				<button id="theme-toggle" class="btn">Toggle Dark Mode</button>
+			</div>
 		</div>
 	</nav>
 
