@@ -20,10 +20,11 @@ from .models import db, User, Site
 from .upload import handle_upload
 from . import login_manager
 from .helpers import list_files
+from .config import Config
 
 main_routes = Blueprint("main", __name__, template_folder="templates")
 
-	
+
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
@@ -244,11 +245,8 @@ def is_default_route(hostname: str):
 
     subdomain = ".".join(parts[: -len(server_parts)])
     return (
-        any(
-            part in current_app.config["RESERVED_SUBDOMAINS"]
-            for part in subdomain.split(".")
-        )
-        or subdomain in current_app.config["RESERVED_SUBDOMAINS"]
+        any(part in Config.RESERVED_SUBDOMAINS for part in subdomain.split("."))
+        or subdomain in Config.RESERVED_SUBDOMAINS
     )
 
 
@@ -266,7 +264,7 @@ def page_not_found(_):
     else:
         if host_parts[-len(server_parts) :] == server_parts:
             subdomain = ".".join(host_parts[: -len(server_parts)])
-            if subdomain and subdomain not in current_app.config["RESERVED_SUBDOMAINS"]:
+            if subdomain and subdomain not in Config.RESERVED_SUBDOMAINS:
                 if not Site.query.filter_by(subdomain=subdomain).first():
                     show_domain = True
 
