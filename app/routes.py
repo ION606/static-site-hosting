@@ -197,11 +197,25 @@ def delete_file(site_id, filename):
     return redirect(url_for("main.dashboard"))
 
 
-@main_routes.route("/", subdomain="<subdomain>", defaults={"filename": "index.html"})
+@main_routes.route(
+    "/",
+    subdomain="<subdomain>",
+    defaults={"subdomain": ""},
+)
 @main_routes.route("/<path:filename>", subdomain="<subdomain>")
-def serve_site_content(subdomain, filename):
+@main_routes.route("/<path:filename>")
+def serve_site_content(filename="index.html", subdomain=""):
     if is_default_route(request.host):
         abort(404)
+
+    # no subdomain provided via route --> extract from host header
+    if not subdomain:
+        server_parts = current_app.config["SERVER_NAME"].split('.')
+        host_parts = request.host.split('.')
+        if host_parts[-len(server_parts):] == server_parts and len(host_parts) > len(server_parts):
+            subdomain = ".".join(host_parts[:-len(server_parts)])
+        else:
+            abort(404)
 
     site = Site.query.filter_by(subdomain=subdomain).first_or_404()
     site.last_accessed = datetime.utcnow()
@@ -253,6 +267,7 @@ def is_default_route(hostname: str):
 # Error handler (would typically be registered in current_app factory)
 @main_routes.app_errorhandler(404)
 def page_not_found(_):
+    print("404", request.host)
     host = request.host
     server_name = current_app.config["SERVER_NAME"]
     server_parts = server_name.split(".")

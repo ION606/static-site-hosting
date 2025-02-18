@@ -19,7 +19,7 @@ def get_secret_key():
 class Config:
     SECRET_KEY = get_secret_key()
     SQLALCHEMY_DATABASE_URI = "sqlite:////app/instance/db.sqlite"
-    UPLOAD_FOLDER = "sites"
+    UPLOAD_FOLDER = "/app/sites"
     SERVER_NAME = "tinysite.cloud"
     SESSION_COOKIE_DOMAIN = ".tinysite.cloud"
     SESSION_COOKIE_NAME = "tinysite_session"

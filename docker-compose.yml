@@ -7,7 +7,7 @@ services:
       - static
     volumes:
       - instance:/app/instance
-      - ./sites:/app/sites
+      - sites:/app/sites
     environment:
       - FLASK_ENV=production
 
@@ -16,3 +16,4 @@ networks:
 
 volumes:
   instance:
+  sites:
