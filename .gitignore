@@ -5,3 +5,4 @@ __pycache__
 nohup.out
 app.pid
 *.log
+.env

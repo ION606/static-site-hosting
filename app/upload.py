@@ -46,6 +46,11 @@ def handle_upload(current_user, site_name, subdomain, files):
         flash("Invalid subdomain format", "error")
         return redirect(url_for("main.dashboard"))
 
+    # Check for reserved subdomains
+    if subdomain in Config.RESERVED_SUBDOMAINS:
+        flash(f"The subdomain '{subdomain}' is reserved", "error")
+        return redirect(url_for("main.dashboard"))
+
     if not site_name or not subdomain:
         flash("Name and subdomain required", "error")
         return redirect(url_for("main.dashboard"))
