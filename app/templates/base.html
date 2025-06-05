@@ -1,117 +1,139 @@
 <!DOCTYPE html>
 <html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta
+			name="description"
+			content="TinySite.cloud Hosting offers effortless hosting and sharing of static sites with instant deployment, dark mode interface, and secure, private data handling!" />
+		<meta
+			name="keywords"
+			content="static site hosting, instant deployment, dark mode, secure hosting, private data, file management, blazing fast" />
+		<meta name="author" content="ION606" />
+		<meta property="og:title" content="TinySite.cloud" />
+		<meta
+			property="og:description"
+			content="Host and share your static sites effortlessly with TinySite.cloud Hosting. Enjoy instant deployment, a sleek dark mode interface, and secure, private data handling!" />
+		<meta
+			property="og:image"
+			content="{{ url_for('static', filename='hosting.png') }}" />
+		<meta property="og:url" content="https://{{ SERVERNAME }}/" />
+		<meta
+			name="twitter:card"
+			content="{{ url_for('static', filename='hosting.png') }}" />
+		<meta name="twitter:title" content="TinySite.cloud" />
+		<meta
+			name="twitter:description"
+			content="Host and share your static sites effortlessly with TinySite.cloud Hosting. Enjoy instant deployment, a sleek dark mode interface, and secure, private data handling!" />
+		<meta
+			name="twitter:image"
+			content="{{ url_for('static', filename='hosting.png') }}" />
 
-<head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<meta name="description"
-		content="ION Static Site Hosting offers effortless hosting and sharing of static sites with instant deployment, dark mode interface, and secure, private data handling!">
-	<meta name="keywords"
-		content="static site hosting, instant deployment, dark mode, secure hosting, private data, file management, blazing fast">
-	<meta name="author" content="ION606">
-	<meta property="og:title" content="ION Static Site Hosting">
-	<meta property="og:description"
-		content="Host and share your static sites effortlessly with ION Static Site Hosting. Enjoy instant deployment, a sleek dark mode interface, and secure, private data handling!">
-	<meta property="og:image" content="{{ url_for('static', filename='hosting.png') }}">
-	<meta property="og:url" content="https://{{ SERVERNAME }}/">
-	<meta name="twitter:card" content="{{ url_for('static', filename='hosting.png') }}">
-	<meta name="twitter:title" content="ION Static Site Hosting">
-	<meta name="twitter:description"
-		content="Host and share your static sites effortlessly with ION Static Site Hosting. Enjoy instant deployment, a sleek dark mode interface, and secure, private data handling!">
-	<meta name="twitter:image" content="{{ url_for('static', filename='hosting.png') }}">
+		<title>TinySite.cloud - {% block title %}{% endblock %}</title>
+		<link
+			rel="stylesheet"
+			href="{{ url_for('static', filename='styles.css') }}"
+			id="theme-style" />
+		<link
+			rel="icon"
+			href="{{ url_for('static', filename='favicon.ico') }}" />
 
-	<title>ION Static Site Hosting - {% block title %}{% endblock %}</title>
-	<link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" id="theme-style">
-	<link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+		<script>
+			document.addEventListener("DOMContentLoaded", () => {
+				const themeToggle = document.querySelector("#theme-toggle");
+				const body = document.body;
 
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-	<script>
-		document.addEventListener('DOMContentLoaded', () => {
-			const themeToggle = document.querySelector('#theme-toggle');
-			const body = document.body;
+				// get saved theme from localStorage
+				const savedTheme = localStorage.getItem("theme") || "dark";
+				body.setAttribute("data-theme", savedTheme);
 
-			// get saved theme from localStorage
-			const savedTheme = localStorage.getItem('theme') || 'dark';
-			body.setAttribute('data-theme', savedTheme);
+				if (!savedTheme) localStorage.setItem("theme", savedTheme);
 
-			if (!savedTheme) localStorage.setItem('theme', savedTheme);
+				// set initial button text
+				themeToggle.textContent =
+					savedTheme === "dark" ? "light mode" : "dark mode";
 
-			// set initial button text
-			themeToggle.textContent = savedTheme === 'dark' ? 'light mode' : 'dark mode';
-
-			themeToggle.addEventListener('click', () => {
-				const isDark = body.getAttribute('data-theme') === 'dark';
-				body.setAttribute('data-theme', isDark ? 'light' : 'dark');
-				localStorage.setItem('theme', isDark ? 'light' : 'dark');
-				themeToggle.textContent = isDark ? 'dark mode' : 'light mode';
+				themeToggle.addEventListener("click", () => {
+					const isDark = body.getAttribute("data-theme") === "dark";
+					body.setAttribute("data-theme", isDark ? "light" : "dark");
+					localStorage.setItem("theme", isDark ? "light" : "dark");
+					themeToggle.textContent = isDark
+						? "dark mode"
+						: "light mode";
+				});
 			});
-		});
-	</script>
+		</script>
 
-	<style>
-		.navbar-toggle {
-			display: none;
-		}
-
-		@media (max-width: 768px) {
+		<style>
 			.navbar-toggle {
-				display: block;
+				display: none;
 			}
-		}
-	</style>
-</head>
 
-<body>
-	<nav class="navbar">
-		<div class="container">
-			<a href="{{ url_for('main.home', _external=True) }}">Home</a>
-			<button id="nav-toggle" class="navbar-toggle" aria-label="menu">&#9776;</button>
-			<div id="navbar-links" class="navbar-links">
-				{% if current_user.is_authenticated %}
-				<a href="{{ url_for('main.dashboard', _external=True) }}">Dashboard</a>
-				<a href="{{ url_for('main.logout', _external=True) }}">Logout</a>
-				{% else %}
-				<a href="{{ url_for('main.login', _external=True) }}">Login</a>
-				<a href="{{ url_for('main.register', _external=True) }}">Register</a>
-				{% endif %}
-				<button id="theme-toggle" class="btn">toggle dark mode</button>
-			</div>
-		</div>
-	</nav>
-
-	<div class="container">
-		{% with messages = get_flashed_messages(with_categories=true) %}
-		{% if messages %}
-		{% for category, message in messages %}
-		<div class="flash-message flash-{{ category }}">
-			{{ message }}
-		</div>
-		{% endfor %}
-		{% endif %}
-		{% endwith %}
-
-		{% block content %}{% endblock %}
-	</div>
-
-	<script>
-		document.addEventListener('DOMContentLoaded', () => {
-			const navToggle = document.querySelector('#nav-toggle');
-			const navbarLinks = document.querySelector('#navbar-links');
-			const navbar = document.querySelector('.navbar');
-
-			navToggle.addEventListener('click', () => {
-				navbarLinks.classList.toggle('active');
-				navToggle.classList.toggle('active');
-			});
-
-			document.addEventListener('click', (e) => {
-				if (!navbar.contains(e.target)) {
-					navbarLinks.classList.remove('active');
-					navToggle.classList.remove('active');
+			@media (max-width: 768px) {
+				.navbar-toggle {
+					display: block;
 				}
-			});
-		});
-	</script>
-</body>
+			}
+		</style>
+	</head>
 
+	<body>
+		<nav class="navbar">
+			<div class="container">
+				<a href="{{ url_for('main.home', _external=True) }}">Home</a>
+				<button id="nav-toggle" class="navbar-toggle" aria-label="menu">
+					&#9776;
+				</button>
+				<div id="navbar-links" class="navbar-links">
+					{% if current_user.is_authenticated %}
+					<a href="{{ url_for('main.dashboard', _external=True) }}"
+						>Dashboard</a
+					>
+					<a href="{{ url_for('main.logout', _external=True) }}"
+						>Logout</a
+					>
+					{% else %}
+					<a href="{{ url_for('main.login', _external=True) }}"
+						>Login</a
+					>
+					<a href="{{ url_for('main.register', _external=True) }}"
+						>Register</a
+					>
+					{% endif %}
+					<button id="theme-toggle" class="btn">
+						toggle dark mode
+					</button>
+				</div>
+			</div>
+		</nav>
+
+		<div class="container">
+			{% with messages = get_flashed_messages(with_categories=true) %} {%
+			if messages %} {% for category, message in messages %}
+			<div class="flash-message flash-{{ category }}">{{ message }}</div>
+			{% endfor %} {% endif %} {% endwith %} {% block content %}{%
+			endblock %}
+		</div>
+
+		<script>
+			document.addEventListener("DOMContentLoaded", () => {
+				const navToggle = document.querySelector("#nav-toggle");
+				const navbarLinks = document.querySelector("#navbar-links");
+				const navbar = document.querySelector(".navbar");
+
+				navToggle.addEventListener("click", () => {
+					navbarLinks.classList.toggle("active");
+					navToggle.classList.toggle("active");
+				});
+
+				document.addEventListener("click", (e) => {
+					if (!navbar.contains(e.target)) {
+						navbarLinks.classList.remove("active");
+						navToggle.classList.remove("active");
+					}
+				});
+			});
+		</script>
+	</body>
 </html>

@@ -1,6 +1,4 @@
-{% extends "base.html" %}
-
-{% block content %}
+{% extends "base.html" %} {% block content %}
 <div class="floating-balls"></div>
 
 <style>
@@ -13,12 +11,13 @@
 	}
 
 	body {
-		font-family: 'Arial', sans-serif;
+		font-family: "Arial", sans-serif;
 		line-height: 1.6;
 		background-color: var(--bg-color);
 		color: var(--text-color);
 		padding: 20px;
-		transition: background-color var(--transition-speed) ease, color var(--transition-speed) ease;
+		transition: background-color var(--transition-speed) ease,
+			color var(--transition-speed) ease;
 		animation: fadeIn var(--fade-duration) ease-out;
 	}
 
@@ -62,7 +61,6 @@
 	}
 
 	@keyframes bounce {
-
 		0%,
 		20%,
 		50%,
@@ -199,14 +197,16 @@
 </style>
 
 <header>
-	<h1>🚀 ION Static Site Hosting</h1>
+	<h1>🚀 TinySite.cloud</h1>
 	<p>Host and share your static sites effortlessly.</p>
 </header>
 
 <div class="main-container">
 	<h2>Why Choose Us?</h2>
-	<p>Whether you’re a developer, designer, or just need to showcase your work, we make it easy to host and share
-		static sites.</p>
+	<p>
+		Whether you’re a developer, designer, or just need to showcase your
+		work, we make it easy to host and share static sites.
+	</p>
 
 	<div class="feature-list">
 		<div class="feature">
@@ -247,10 +247,10 @@
 
 <!-- JavaScript to create balls and add "pop" effects -->
 <script>
-	const wait = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+	const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 	document.addEventListener("DOMContentLoaded", async () => {
-		const container = document.querySelector('.floating-balls');
+		const container = document.querySelector(".floating-balls");
 
 		// Generate a random number of balls between 10 and 30
 		const ballCount = Math.floor(Math.random() * 21) + 10;
@@ -258,14 +258,14 @@
 			const ball = document.createElement("div");
 			ball.classList.add("floating-ball");
 
-			await wait(Math.random() * 2000)
+			await wait(Math.random() * 2000);
 
 			// Randomize properties
 			const size = 30 + Math.random() * 40;
 			ball.style.width = size + "px";
 			ball.style.height = size + "px";
 			ball.style.left = Math.random() * 100 + "%";
-			ball.style.animationDuration = (10 + Math.random() * 10) + "s";
+			ball.style.animationDuration = 10 + Math.random() * 10 + "s";
 			ball.style.animationDelay = Math.random() * 5 + "s";
 
 			container.appendChild(ball);
@@ -273,12 +273,13 @@
 
 		// random pop every 2 seconds
 		setInterval(() => {
-			const balls = document.querySelectorAll('.floating-ball');
+			const balls = document.querySelectorAll(".floating-ball");
 			if (balls.length) {
-				const randomBall = balls[Math.floor(Math.random() * balls.length)];
-				randomBall.classList.add('pop');
+				const randomBall =
+					balls[Math.floor(Math.random() * balls.length)];
+				randomBall.classList.add("pop");
 				setTimeout(() => {
-					randomBall.classList.remove('pop');
+					randomBall.classList.remove("pop");
 				}, 500);
 			}
 		}, 2000);
