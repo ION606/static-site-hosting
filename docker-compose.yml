@@ -1,18 +1,24 @@
 services:
-    app:
-        build: .
-        ports:
-            - "5121:5121"
-        networks:
-            - static
-        volumes:
-            - instance:/app/instance
-            - sites:/app/sites
-        env_file: .env
+  app:
+    build: .
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 10
+        window: 120s
+    ports:
+      - "5121:5121"
+    networks:
+      - static
+    volumes:
+      - instance:/app/instance
+      - sites:/app/sites
+    env_file: .env
 
 networks:
-    static:
+  static:
 
 volumes:
-    instance:
-    sites:
+  instance:
+  sites:
